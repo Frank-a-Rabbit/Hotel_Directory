@@ -4,7 +4,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.SqlServer;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using HotelDirectory.Data;
+using HotelDirectory.Models;
 
 namespace HotelDirectory
 {
@@ -22,7 +26,7 @@ namespace HotelDirectory
                 builder.Services.AddSwaggerGen();
 
                 // Configure the database connection and add ApplicationDbContext
-                builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                builder.Services.AddDbContext<HotelDirectoryDbContext>(options =>
                     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
                 var app = builder.Build();
