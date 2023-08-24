@@ -19,8 +19,8 @@ namespace HotelDirectory.Models
         {
             Name = "";
             Location = "";
-            Images = new List<string>();
-            Amenities = new List<string>();
+            Images = new List<Image>();
+            Amenities = new List<Amenity>();
             Description = "";
             WebUrl = "";
         }
