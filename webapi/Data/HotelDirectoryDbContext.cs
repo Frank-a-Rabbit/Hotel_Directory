@@ -10,6 +10,6 @@ namespace HotelDirectory.Data
         {
 
         }
-
+        public DbSet<Hotel> Hotel { get; set; }
     }
 }
