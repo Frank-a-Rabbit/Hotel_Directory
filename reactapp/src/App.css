@@ -1,0 +1,15 @@
+.root {
+  --base-size: 1px;
+  --base-multiplier: 2;
+  --base-unit: calc(var(--base-size) * var(--base-multiplier));
+  --light-blue: #CCF9FF;
+  --med-blue: #4D9DFF;
+  --light-silver: #F0F0F0;
+  --black: #000000;
+  --font-body: 'Fira Sans', sans-serif;
+  --font-title: 'Roboto Condensed', sans-serif;
+  --font-size-reg: calc(var(--base-unit) * 8);
+  --font-size-lg: calc(var(--base-unit) * 10);
+  --line-height-reg: 1.25;
+  --line-height-lg: 1.5;
+}

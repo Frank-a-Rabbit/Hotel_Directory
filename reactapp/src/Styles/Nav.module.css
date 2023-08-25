@@ -1,0 +1,44 @@
+@layer base {
+    :where(.navCont) {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: calc(var(--base-unit) * 8);
+        width: 100%;
+        max-width: calc(var(--base-unit) * 150);
+        box-shadow: var(--base-unit) var(--base-unit) var(--base-unit) rgba(0, 0, 0, 0.25);
+        background-color: var(--light-silver);
+        opacity: 0;
+        pointer-events: none;
+        z-index: 100;
+    }
+
+    :where(.navCont.active) {
+        opacity: 1;
+        pointer-events: all;
+    }
+
+    :where(.navCont a) {
+        font: var(--font-size-reg)/var(--line-height-reg) var(--font-title);
+        color: var(--black);
+        text-transform: uppercase;
+        text-decoration: none;
+        letter-spacing: calc(var(--base-unit) * 1.5);
+    }
+
+    :where(.navCont ul) {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        width: 100%;
+    }
+
+    :where(.navCont li) {
+        padding: calc(var(--base-unit) * 2);
+        margin-bottom: calc(var(--base-unit) * 4);
+        border-bottom: var(--base-unit) solid black;
+    }
+}

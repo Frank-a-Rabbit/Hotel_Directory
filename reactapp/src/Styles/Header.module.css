@@ -1,0 +1,44 @@
+@layer base {
+    :where(.header) {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: var(--light-silver);
+        padding: calc(var(--base-unit) * 4);
+        box-shadow: var(--base-unit) var(--base-unit) var(--base-unit) rgba(0, 0, 0, 0.25);
+    }
+
+    :where(.inner) {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    :where(.logo) {
+        max-width: calc(var(--base-unit) * 100);
+    }
+
+    :where(.logo img) {
+        width: 100%;
+    }
+
+    :where(.hammy) {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        width: calc(var(--base-unit) * 18);
+        height: calc(var(--base-unit) * 18);
+        background-color: var(--light-blue);
+        border-radius: calc(var(--base-unit) * 4);
+        border: 1px solid var(--med-blue);
+        cursor: pointer;
+    }
+
+    :where(.hammy div) {
+        width: 100%;
+        height: var(--base-unit);
+        border-radius: var(--base-unit);
+        background-color: var(--med-blue);
+    }
+}

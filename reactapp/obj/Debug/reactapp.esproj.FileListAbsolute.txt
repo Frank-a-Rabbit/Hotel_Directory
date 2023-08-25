@@ -1,0 +1,2 @@
+C:\Users\jbooth\source\repos\HotelDirectory\reactapp\obj\Debug\reactapp.esproj.SuggestedBindingRedirects.cache
+C:\Users\jbooth\source\repos\HotelDirectory\reactapp\obj\Debug\reactapp.esproj.CoreCompileInputs.cache
