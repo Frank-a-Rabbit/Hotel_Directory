@@ -25,10 +25,15 @@ public class AssignRolesController : ControllerBase
     public async Task<IActionResult> AssignRoles([FromBody] AssignRolesRequest request)
     {
         var _existingUser = await userManager.FindByEmailAsync(request.Email);
-        System.Console.WriteLine("User already exists: " + _existingUser.GetType() + "!");
 
         if (_existingUser != null)
         {
+            System.Console.WriteLine("User " + _existingUser.PasswordHash + " already exists! " + request.Password);
+            var passwordCheck = await userManager.CheckPasswordAsync(_existingUser, request.Password);
+            if (!passwordCheck)
+            {
+                return BadRequest("Invalid password");
+            }
             if (request.Email == "jfrankbooth@gmail.com")
             {
                 if (!await roleManager.RoleExistsAsync("Administrator"))
@@ -59,15 +64,16 @@ public class AssignRolesController : ControllerBase
         };
 
         var result = await userManager.CreateAsync(user, request.Password);
-        
-        System.Console.WriteLine(request.UserName + " " + request.Email + " " + request.Password + " result " + result);
+
         if (result.Succeeded)
         {
-            var claims = new List<Claim>
+            var claims = new List<Claim>();
+            if (request.Email == "jfrankbooth@gmail.com")
             {
-                new Claim(ClaimTypes.Name, user.UserName)
-            };
-            System.Console.WriteLine("claimsssss!!!! " + claims);
+                claims.Add(new Claim(ClaimTypes.Role, "Administrator"));
+            } else {
+                claims.Add(new Claim(ClaimTypes.Role, "User"));
+            }
             await userManager.AddClaimsAsync(user, claims);
 
             return Ok();

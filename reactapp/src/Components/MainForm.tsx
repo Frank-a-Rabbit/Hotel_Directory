@@ -30,6 +30,7 @@ const MainForm:React.FC<MainFormProps> = () => {
     Password: '',
     ConfirmPassword: '',
   });
+
   const [pwordConfirmed, setPwordConfirmed] = useState(false);
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -51,7 +52,6 @@ const handleSubmit = async (event: any) => {
       },
       body: JSON.stringify(formData)
     });
-    console.log("Farm data ", formData);
     if (res.ok) {
       console.log("Server responded with:", res);
       setAuthUser({ currentUser : await res.json()});
@@ -62,10 +62,6 @@ const handleSubmit = async (event: any) => {
     console.error("An error occurred during the request:", error);
   }
 };
-
-const newFetch = () => {
-  console.log('testing')
-}
 
   return (
     <>
@@ -90,6 +86,7 @@ const newFetch = () => {
           <TextField
             label="Password"
             name="Password"
+            type='password'
             value={formData.Password}
             onChange={handleInputChange}
           />
@@ -98,21 +95,21 @@ const newFetch = () => {
           <TextField
             label="Confirm Password"
             name="ConfirmPassword"
+            type='password'
             value={formData.ConfirmPassword}
             data-type='confirm'
             onChange={handleInputChange}
           />
         </FormControl>
         {formData.Password !== formData.ConfirmPassword && (
-          <span>Passwords Do Not Match. Keep trying.</span>
+          <span>Passwords Do Not Match.</span>
         )}
-        <Button type="submit" variant="contained" color="primary" className={pwordConfirmed ? styles.confirmed : ""}>
-          Submit
-        </Button>
+        {formData.Password === formData.ConfirmPassword && (
+          <Button type="submit" variant="contained" color="primary" className={pwordConfirmed ? styles.confirmed : ""}>
+            Submit
+          </Button>  
+        )}
       </form>
-      <Button variant='contained' color='primary' onClick={newFetch}>
-        Click Me
-      </Button>
       {authUser.currentUser && (
         <div>{authUser.currentUser.UserName}</div>
       )}
