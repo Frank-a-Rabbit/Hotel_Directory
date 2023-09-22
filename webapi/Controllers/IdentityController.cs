@@ -5,6 +5,8 @@ using System.Security.Claims;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System.Net.Sockets;
 
 namespace webapi.Controllers;
 
@@ -14,11 +16,13 @@ public class AssignRolesController : ControllerBase
 {
     private readonly UserManager<User> userManager;
     private readonly RoleManager<IdentityRole> roleManager;
+    private readonly IPasswordHasher<User> passwordHasher; 
 
-    public AssignRolesController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+    public AssignRolesController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IPasswordHasher<User> passwordHasher)
     {
         this.userManager = userManager;
         this.roleManager = roleManager;
+        this.passwordHasher = passwordHasher;
     }
 
     [HttpPost]
@@ -28,11 +32,13 @@ public class AssignRolesController : ControllerBase
 
         if (_existingUser != null)
         {
-            System.Console.WriteLine("User " + _existingUser.PasswordHash + " already exists! " + request.Password);
+            System.Console.WriteLine("User " + _existingUser.PasswordHash + " already exists! ");
             var passwordCheck = await userManager.CheckPasswordAsync(_existingUser, request.Password);
+            System.Console.WriteLine("Existing user: " + _existingUser);
+            System.Console.WriteLine("Password check: " + passwordCheck);
             if (!passwordCheck)
             {
-                return BadRequest("Invalid password");
+                return BadRequest("Invalid password!!");
             }
             if (request.Email == "jfrankbooth@gmail.com")
             {
@@ -67,16 +73,37 @@ public class AssignRolesController : ControllerBase
 
         if (result.Succeeded)
         {
-            var claims = new List<Claim>();
+            System.Console.WriteLine("User " + user.UserName + " created!");
+            if (!await roleManager.RoleExistsAsync("Administrator"))
+            {
+                await roleManager.CreateAsync(new IdentityRole("Administrator"));
+            }
+            else
+            {
+                System.Console.WriteLine("Role Administrator already exists!");
+                return BadRequest("Role Administrator already exists!");
+            }
             if (request.Email == "jfrankbooth@gmail.com")
             {
-                claims.Add(new Claim(ClaimTypes.Role, "Administrator"));
-            } else {
-                claims.Add(new Claim(ClaimTypes.Role, "User"));
+                var addToRoleResult = await userManager.AddToRoleAsync(user, "Administrator");
+                if (!addToRoleResult.Succeeded)
+                {
+                    return BadRequest(addToRoleResult.Errors);
+                } else {
+                    System.Console.WriteLine("User " + user.UserName + " added to role Administrator!");
+                }
             }
-            await userManager.AddClaimsAsync(user, claims);
-
-            return Ok();
+            else 
+            {
+                var addToRoleResult = await userManager.AddToRoleAsync(user, "User");
+                if (!addToRoleResult.Succeeded)
+                {
+                    return BadRequest(addToRoleResult.Errors);
+                } else {
+                    System.Console.WriteLine("User " + user.UserName + " added to role User!");
+                }
+            }
+            return Ok(user);
         }
         else
         {

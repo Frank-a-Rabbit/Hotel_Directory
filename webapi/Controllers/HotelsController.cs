@@ -21,6 +21,13 @@ namespace HotelDirectory.Controllers
             _context = context;
         }
 
+        [HttpGet("/hotels")]
+        public IActionResult WelcomeMessage()
+        {
+            System.Console.WriteLine("Welcome to the Hotel Directory API!");
+            return Ok("Welcome to the Hotel Directory API!");
+        }
+
         // GET: api/Hotel
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Hotel>>> GetHotel(int PageNumber =1, int PageSize = 10)
@@ -47,7 +54,7 @@ namespace HotelDirectory.Controllers
 
         // PUT: api/Hotel/5
         [HttpPut("{id}")]
-        [Authorize]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> PutHotel(int id, Hotel hotel)
         {
             if (id != hotel.Id)
